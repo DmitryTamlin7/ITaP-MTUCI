@@ -1,15 +1,25 @@
 public class Palindrome {
-    public static void main(String[] args){
+        public static void main(String[] args) {
+            
+                String s = args[0];
+                if (isPalindrome(s)) {
+                    System.out.println(s + " palindrome");
+                } else {
+                    System.out.println(s + " no palindrome");
+                }}
+            
+        
 
-        String str = "noon"; 
-    
-        StringBuilder str1 = new StringBuilder(str);
-        str1.reverse();
-    
-        if (str.equals(str1.toString())) {
-            System.out.println( str + " Palindromme");
+        public static String reverseString(String s) {
+            String reversed = "";
+            for (int i = s.length() - 1; i >= 0; i--) {
+                reversed += s.charAt(i);
+            }
+            return reversed;
         }
-        else{
-            System.out.println(str + " No Palindrome");
+
+        public static boolean isPalindrome(String s) {
+            return s.equals(reverseString(s));
         }
-    }}
+}
+
