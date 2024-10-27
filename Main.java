@@ -1,150 +1,216 @@
-import  java.util.Arrays;
+import java.lang.runtime.SwitchBootstraps;
+import java.rmi.MarshalException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
 
-public class Main {
+
+class tasks3 {
+
     public static void main(String[] args) {
-        int[] array = {3, 12, 7, 122, 53};
-        double [] array1 = {3.1, 0, 1.11, 1.11 , 0 , 13.4};
-        double [] array2 = {3.5, 7.0, 1.5, 9.0, 5.5};
+        // для 7
+        String[][] inventory1 = {
+                {"Скакалка", "550", "8"},
+                {"Шлем", "3750", "4"},
+                {"Мяч", "2900", "10"}};
+        //1
+        System.out.println(isStrangePair("repeat", "lalader"));
+        System.out.println(isStrangePair("aepeaw", "waladea"));
+        //2
+        System.out.println("nSale:");
+        Object[][] items = {
+                {"Laptop", 124200},
+                {"Phone", 51450},
+                {"Headphones", 13800}
+        };
 
-        System.out.println(duplicateChars("barack", "obama"));
-        System.out.println(getInitials("сергей","сергеевич","симонов"));
-        System.out.println(equal(5, 4, 1));
-        System.out.println(dividedByThree(array));
-        System.out.println(secondBiggest(array));
-        System.out.println(camelToSnake("HelloWorld"));
-        System.out.println(Arrays.toString(compressedNums(array1)));
-        System.out.println(Arrays.toString(normalizator(array2)));
-        System.out.println(localReverse("baobab", 'b'));
-        System.out.println(isAnagram("LISTEN", "silent") );
+        List<Object[]> result = sale(items, 25);
+        for (Object[] item : result) {
+            System.out.println(item[0] + ": " + item[1]);
+        }
 
+
+        //3
+        System.out.println(SucsessShoot(0, 0, 5, 2, 2));
+        System.out.println(SucsessShoot(5, 5, 3, -2, -14));
+        //4
+        System.out.println(parityAnalysis(244));
+        System.out.println(parityAnalysis(13));
+        //5
+        System.out.println(rps("rock", "paper"));
+        System.out.println(rps("scissors", "paper"));
+        //6
+        System.out.println(bugger(999));
+        //7
+        System.out.println(mostExpensive(inventory1));
+        //8
+        System.out.println(longestUnique("abcba"));
+        //9
+        System.out.println(isPrefix("automation", "auto-"));
+        System.out.println(isSuffix("arachnophobia", "-phobia"));
+        //10
+        System.out.println(doesBrickFit(1, 2, 1, 1, 1));
+        System.out.println(doesBrickFit(1, 2, 2, 1, 1));
 
     }
-//1
-    public static String duplicateChars(String str1, String str2) {
-        StringBuilder result = new StringBuilder();
 
-        for (char ch : str1.toCharArray()) {
-            if (str2.indexOf(ch) == -1) {
-                result.append(ch);
+    //1
+    public static boolean isStrangePair(String str1, String str2) {
+
+        if (str1 == null || str2 == null) {
+            return false;
+        }
+
+        boolean con1 = str1.charAt(0) == str2.charAt(str2.length() - 1);
+
+        boolean con2 = str1.charAt(str1.length() - 1) == str2.charAt(0);
+
+        return con1 && con2;
+    }
+
+    //2
+
+    public static List<Object[]> sale(Object[][] items, int discount) {
+        List<Object[]> discountedItems = new ArrayList<>();
+
+        for (Object[] item : items) {
+            String name = (String) item[0];
+            int price = (int) item[1];
+            int newPrice = (int) Math.round(price * (1 - discount / 100.0));
+            newPrice = Math.max(newPrice, 1);
+            discountedItems.add(new Object[]{name, newPrice});
+        }
+
+        return discountedItems;
+    }
+
+
+
+    //3
+        public static boolean SucsessShoot(int x, int y, int r, int m, int n) {
+            return  Math.pow(m - x, 2 ) + Math.pow(n - y, 2) <= Math.pow(r, 2);
+
+        }
+
+
+        //4
+        public static boolean parityAnalysis(int ins) {
+            int inscop = ins;
+            int size = 0;
+            while (ins > 0) {
+                int l = ins % 10;
+                size = size + l;
+                ins /= 10;
+            }
+            return  (inscop % 2 == 0 && size % 2 == 0);
+        }
+
+        //5
+        public static String rps(String p1, String p2) {
+            p1 = p1.toLowerCase();
+            p2 = p2.toLowerCase();
+
+            if(p1.equals(p2)){
+                return "Tie";
+            }
+            switch (p1){
+                case "rock" :
+                    return p2.equals("scissors") ? "1 Win" : "2 Win";
+
+                case "scissors" :
+                    return p2.equals("rock") ? "2 Win" : "1 Win";
+
+                case  "paper" :
+                    return p2.equals("rock") ? "1 Win" : "2 Win";
+
+                default:
+                    return "ошибка";
             }
         }
 
-        return result.toString();
-    }
+        // 6
+        public static int bugger(int num) {
+            if (num < 10) return 0; // Если уже одна цифра
 
-//2
-    public static int dividedByThree(int[] arr) {
-
-        int count = 0;
-        for( int num = 0; num < arr.length; num++){
-
-        if (arr[num] % 3 ==0 && arr[num] % 2 != 0) {
-
-            count ++;
+            int count = 0;
+            while (num >= 10) {
+                int product = 1;
+                while (num > 0) {
+                    product *= num % 10;
+                    num /= 10;
+                }
+                num = product;
+                count++;
+            }
+            return count;
         }
 
 
-        }
-        return count;
-
-    }
-
-//3
-    public static String getInitials(String a, String b, String c) {
-
-        String x3 = c.toUpperCase() +" "+ a.toUpperCase().charAt(0) + "." + b.toUpperCase().charAt(0) + "." ;
-
-                return x3;
-    }
-
-//4
-    public static double [] normalizator(double[] arr){
-        double min = Arrays.stream(arr).min().getAsDouble();
-        double max = Arrays.stream(arr).max().getAsDouble();
-
-        double[] normalizedArr = new double[arr.length];
-
-        for (int i = 0; i < arr.length; i++) {
-            normalizedArr[i] = (arr[i] - min) / (max - min);
-        }
-        return normalizedArr;
-
-    }
 
 
-//5
-    public static int[] compressedNums(double[] arr){
-        return  Arrays.stream(arr)
-                .filter(num -> num != 0)
-                .mapToInt(num -> (int) num)
-                .distinct()
-                .sorted()
-                .toArray();
-
-    }
-
-//6
-    public  static String camelToSnake(String str) {
-        return  str.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
-
-
-
-    }
-
-
-
-
-
-//7
-
-    public  static int secondBiggest(int[] arr){
-        Arrays.sort(arr);
-        return arr[arr.length - 2];
-
-
-    }
-//8
-
-    public static String localReverse(String str, char marker) {
-        String[] parts = str.split(marker + "");
-        for (int i = 1; i < parts.length; i += 2) {
-            parts[i] = new StringBuilder(parts[i]).reverse().toString();
-        }
-        return String.join(marker + "", parts);
-    }
-
-
-//9
-    public static int equal(int a, int b, int c){
-
-        int count = 0;
-        if(a == b){
-            count +=2;
+        //7
+        public static String mostExpensive(String[][] inventory) {
+            int maxTotalPrice = 0;
+            String item = "";
+            for (String[] inv : inventory) {
+                int totalPrice = Integer.parseInt(inv[1]) * Integer.parseInt(inv[2]);
+                if (totalPrice > maxTotalPrice) {
+                    maxTotalPrice = totalPrice;
+                    item = inv[0];
+                }
+            }
+            return item + "-" + maxTotalPrice;
         }
 
-        if(a == c){
-            count +=2;
+        //8
+        public static String longestUnique(String str) {
+            int n = str.length();
+            int maxLength = 0;
+            int start = 0; // Начало текущей подстроки
+            String longestSubstr = "";
+
+            HashSet<Character> charSet = new HashSet<>();
+
+            for (int end = 0; end < n; end++) {
+                // Если символ уже в множестве, сдвигаем начало
+                while (charSet.contains(str.charAt(end))) {
+                    charSet.remove(str.charAt(start));
+                    start++;
+                }
+                charSet.add(str.charAt(end));
+
+                // Обновляем максимальную длину и подстроку
+                if (end - start + 1 > maxLength) {
+                    maxLength = end - start + 1;
+                    longestSubstr = str.substring(start, end + 1);
+                }
+            }
+
+            return longestSubstr;
         }
 
-        if(b == c) {
-            count +=2;
+            //9
+        public static boolean isPrefix(String word, String prefix) {
+            return word.startsWith(prefix.substring(0, prefix.length() - 1));
         }
-        if(count >3){
-            count -=1;
-        }
-        return count;
 
+        public static boolean isSuffix(String word1, String suffix) {
+            return word1.endsWith(suffix.substring(1));
+        }
+
+        //10
+        public static boolean doesBrickFit(int a, int b, int c, int w, int h) {
+            return (a <= w && b <= h) || (a <= h && b <= w) ||
+                    (a <= w && c <= h) || (a <= h && c <= w) ||
+                    (b <= w && c <= h) || (b <= h && c <= w);
+        }
     }
-//10
-    public  static boolean isAnagram(String str1, String str2 ){
-        char[] Chararr1 =   str1.toLowerCase().toCharArray();
-        char[] Chararr2 =   str2.toLowerCase().toCharArray();
-
-        Arrays.sort(Chararr1);
-        Arrays.sort(Chararr2);
-
-        return Arrays.equals(Chararr1, Chararr2);
 
 
-    }
-}
+
+
+
+
+
+
